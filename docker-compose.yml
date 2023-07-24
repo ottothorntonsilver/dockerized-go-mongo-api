@@ -1,0 +1,19 @@
+services:
+  mongo:
+    image: mongo:latest
+    ports:
+      - 8000:27017
+    command: mongod
+    volumes:
+      - ./data:/data/db
+  # server:
+  #   build:
+  #     context: server
+  #   ports: 
+  #     - 8080
+    # links:
+    #   - mongo
+    # depends_on:
+    #   - mongo
+    # volumes:
+    #   - /var/run/docker.sock:/var/run/docker.sock
