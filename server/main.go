@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -37,8 +36,7 @@ func setupRouter() *gin.Engine {
 	})
 
 	authorized := r.Group("/", gin.BasicAuth(gin.Accounts{
-		"foo":  "bar", // user:foo password:bar
-		"manu": "123", // user:manu password:123
+		"foo": "bar", // user:foo password:bar
 	}))
 
 	/* example curl for /admin with basicauth header
@@ -61,8 +59,8 @@ func setupRouter() *gin.Engine {
 		if c.Bind(&json) == nil {
 			db[user] = json.Value
 
-			coll := mongodb.Database("test").Collection("users")
-			var existing_user bson.M
+			// coll := mongodb.Database("test").Collection("users")
+			// var existing_user bson.M
 
 			c.JSON(http.StatusOK, gin.H{"status": "ok"})
 		}
