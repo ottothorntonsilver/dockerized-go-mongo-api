@@ -11,22 +11,15 @@ import (
 )
 
 func ConnectDB() *mongo.Client {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(EnvMongoURI()))
+	client, err := mongo.NewClient(options.Client().ApplyURI(EnvMongoURI()))
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Println("Connected to MongoDB!")
-
-	// adding defer function to handle error that occurs when disconnecting from MongoDB
-	defer func() {
-		if err = client.Disconnect(ctx); err != nil {
-			log.Fatal(err)
-		}
-	}()
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	err = client.Connect(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	//ping the database
 	err = client.Ping(ctx, nil)
@@ -36,6 +29,9 @@ func ConnectDB() *mongo.Client {
 	fmt.Println("Connected to MongoDB")
 	return client
 }
+
+// Client instance
+var DB *mongo.Client = ConnectDB()
 
 // getting database collections
 func GetCollection(client *mongo.Client, collectionName string) *mongo.Collection {
