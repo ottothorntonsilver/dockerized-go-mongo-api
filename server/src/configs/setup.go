@@ -14,7 +14,7 @@ func ConnectDB() *mongo.Client {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017"))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(EnvMongoURI()))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -24,7 +24,7 @@ func ConnectDB() *mongo.Client {
 	// adding defer function to handle error that occurs when disconnecting from MongoDB
 	defer func() {
 		if err = client.Disconnect(ctx); err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 	}()
 
@@ -36,9 +36,6 @@ func ConnectDB() *mongo.Client {
 	fmt.Println("Connected to MongoDB")
 	return client
 }
-
-// Client instance
-var DB *mongo.Client = ConnectDB()
 
 // getting database collections
 func GetCollection(client *mongo.Client, collectionName string) *mongo.Collection {
