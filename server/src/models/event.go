@@ -9,3 +9,10 @@ type Event struct {
 	Date        string `bson:"date,omitempty"`
 	TicketCount int    `bson:"ticket_count,omitempty"`
 }
+
+type EventSchema struct {
+	Name        string `json:"name"`
+	VenueID     string `json:"venue_id"`
+	Date        string `json:"date"`
+	TicketCount int    `json:"ticket_count"`
+}
